@@ -1,6 +1,6 @@
 {
   "name": "react-context-api-store",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "An HOC state management inpired by redux implemented using react's context api.",
   "main": "lib/index.js",
   "scripts": {
