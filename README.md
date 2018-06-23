@@ -91,13 +91,17 @@ Then you pass this as the `store` prop to the provider.
 
 ###### Note
 
-The provider always assume that the store is an object and no checks were added to minimize the file size. Making sure that you pass an object as the `store` is up to you.
+The provider always assume that the store is an object. No checks were added to minimize the file size. Making sure that you pass an object as the `store` is up to you.
 
 #### Connecting a component to the store
 
 Works the same way as with redux, with a little bit of change. You import `{ connect }` from the `react-context-api-store` package. Connect is an HOC that wraps your component with the `Provider.Consumer` and passes all the states and actions to the component as properties.
 
 `Connect` accepts two parameters. The first parameter is a `callback function` that will receive the `store's current state`. It should return an object that maps all the states that you want the component to have.
+
+###### Note
+
+`connect` always assume that the first parameter is a function. No checks were added to minimize the file size.
 
 **example code**
 
@@ -115,6 +119,11 @@ function mapStateToProps (state => {
 
 The second parameter is an object containing all the functions that will serve as the action. This is typically what you call when the user clicks a button or a particular event occured. The action will receive the original parameters given to it, except it will receive an object as the first parameter, this object is provided by the `dispatcher`. The object contains two things, **(1)** the store's state and **(2)** a function called `updateStore`. The `updateStore` function is what you call when you want to update the state, you need to give it an object of the states that you want to update, the rest that you did not touch will remain unchanged and intact.
 
+###### Note
+
+- `connect` always assume that the second parameter is an object. No checks were added to minimize the file size.
+- `dispatcher` always assume that all actions are functions. No checks were added to minimize the file size.
+- `store.updateStore` always assume that you'll give it an object as the first parameter. No checks were added to minimize the file size.
 
 **example code**
 
