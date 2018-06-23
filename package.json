@@ -1,0 +1,50 @@
+{
+  "name": "react-context-store",
+  "version": "1.0.0",
+  "description": "An HOC state management inpired by redux implemented using react's context api.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src --out-dir lib/",
+    "lint": "eslint src/**/*.js __tests__/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aprilmintacpineda/react-context-store.git"
+  },
+  "keywords": [
+    "stateful",
+    "state-management",
+    "react-context-api",
+    "store",
+    "global-states"
+  ],
+  "files": [
+    "lib/*",
+    "README.md",
+    "package.json",
+    "package-lock.json"
+  ],
+  "author": "April Mintac Pineda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aprilmintacpineda/react-context-store/issues"
+  },
+  "homepage": "https://github.com/aprilmintacpineda/react-context-store#readme",
+  "dependencies": {
+    "prop-types": "^15.6.2",
+    "react": "^16.4.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-minify": "^0.4.3",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.9.1"
+  }
+}

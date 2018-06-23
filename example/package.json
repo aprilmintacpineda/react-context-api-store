@@ -1,0 +1,52 @@
+{
+  "name": "react-context-store-example",
+  "version": "1.0.0",
+  "description": "An HOC state management inpired by redux implemented using react's context api.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "babel-node node_modules/webpack/bin/webpack.js --watch",
+    "build": "rm -rf build && npm run webpack",
+    "start": "npm run build && npm run serve",
+    "serve": "cp -R public/** build/ && serve -s build",
+    "lint": "eslint src/**/*.js __tests__/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aprilmintacpineda/react-context-store.git"
+  },
+  "keywords": [
+    "stateful",
+    "state-management",
+    "react-context-api",
+    "store",
+    "global-states"
+  ],
+  "author": "April Mintac Pineda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aprilmintacpineda/react-context-store/issues"
+  },
+  "homepage": "https://github.com/aprilmintacpineda/react-context-store#readme",
+  "dependencies": {
+    "prop-types": "^15.6.2",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-router-dom": "^4.3.1",
+    "webpack-cli": "^3.0.8"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.4",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.9.1",
+    "serve": "^9.1.0",
+    "webpack": "^4.12.0"
+  }
+}
