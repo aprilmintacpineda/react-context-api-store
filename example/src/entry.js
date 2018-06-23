@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
+import Provider from 'react-context-api-store';
 
 import routes from './routes';
-import Provider from '../../lib';
 
 import store from './store';
 
