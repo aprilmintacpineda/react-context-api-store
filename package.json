@@ -1,5 +1,5 @@
 {
-  "name": "react-context-store",
+  "name": "react-context-api-store",
   "version": "1.0.0",
   "description": "An HOC state management inpired by redux implemented using react's context api.",
   "main": "lib/index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aprilmintacpineda/react-context-store.git"
+    "url": "git+https://github.com/aprilmintacpineda/react-context-api-store.git"
   },
   "keywords": [
     "stateful",
@@ -28,9 +28,9 @@
   "author": "April Mintac Pineda",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/aprilmintacpineda/react-context-store/issues"
+    "url": "https://github.com/aprilmintacpineda/react-context-api-store/issues"
   },
-  "homepage": "https://github.com/aprilmintacpineda/react-context-store#readme",
+  "homepage": "https://github.com/aprilmintacpineda/react-context-api-store#readme",
   "dependencies": {
     "prop-types": "^15.6.2",
     "react": "^16.4.1"
