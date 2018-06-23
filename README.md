@@ -285,3 +285,7 @@ function myStateHandler (store, data) {
   });
 }
 ```
+
+# Related
+
+- [inferno-context-api-store](https://github.com/aprilmintacpineda/inferno-context-api-store) inferno compatible version of the same thing.
