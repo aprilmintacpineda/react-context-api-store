@@ -1,6 +1,6 @@
 export default [
   {
-    mode: 'development',
+    mode: 'production',
     name: 'bundling javascript files',
     entry: __dirname + '/src/entry.js',
     output: {
