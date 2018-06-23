@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
+import { HashRouter, Route, Link, Switch } from 'react-router-dom';
 import Provider from 'react-context-api-store';
 
 import routes from './routes';
@@ -11,7 +11,7 @@ class App extends React.Component {
   render () {
     return (
       <Provider store={store}>
-        <BrowserRouter>
+        <HashRouter>
           <div>
             <ul>
               <li>
@@ -27,7 +27,7 @@ class App extends React.Component {
               }
             </Switch>
           </div>
-        </BrowserRouter>
+        </HashRouter>
       </Provider>
     );
   }
