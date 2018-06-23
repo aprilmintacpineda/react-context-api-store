@@ -23,7 +23,8 @@
     "lib/*",
     "README.md",
     "package.json",
-    "package-lock.json"
+    "package-lock.json",
+    "LICENSE"
   ],
   "author": "April Mintac Pineda",
   "license": "MIT",
