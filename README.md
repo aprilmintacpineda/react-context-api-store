@@ -13,6 +13,9 @@ Seemless, light weight, state management library that comes with asynchronous su
 # Use case
 When you want a state management that's small and supports asynchronous actions out of the box.
 
+# Example
+https://aprilmintacpineda.github.io/react-context-api-store/#/
+
 # Guide
 
 ## Install
