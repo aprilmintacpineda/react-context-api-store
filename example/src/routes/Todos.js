@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-context-api-store';
+import { connect } from '../lib';
 
 import { updateTodoDone, deleteTodo, addTodo } from '../store';
 

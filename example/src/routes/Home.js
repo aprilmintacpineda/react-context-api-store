@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-context-api-store';
+import { connect } from '../lib';
 
 import { changeUsername } from '../store';
 
@@ -9,6 +9,7 @@ class Home extends React.Component {
     return (
       <div>
         <h1>Your username is: {this.props.userState.username}</h1>
+        <p>I am using the persist feature to persist your username but not your todos.</p>
         <input
           type="text"
           placeholder="change username..."

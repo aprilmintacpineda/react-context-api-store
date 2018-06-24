@@ -7,7 +7,8 @@ test('passes states as props to connected components', () => {
   const persist = {
     storage: {
       getItem: jest.fn(),
-      setItem: jest.fn()
+      setItem: jest.fn(),
+      removeItem: jest.fn()
     },
     statesToPersist: () => ({})
   };
@@ -46,7 +47,8 @@ test('calls persist.storage.setItem with default key when an action was dispatch
   const persist = {
     storage: {
       getItem: jest.fn(),
-      setItem: jest.fn()
+      setItem: jest.fn(),
+      removeItem: jest.fn()
     },
     statesToPersist: () => ({})
   };
@@ -117,7 +119,8 @@ test('calls persist.storage.setItem with custom key when an action was dispatche
   const persist = {
     storage: {
       getItem: jest.fn(),
-      setItem: jest.fn()
+      setItem: jest.fn(),
+      removeItem: jest.fn()
     },
     statesToPersist: () => ({}),
     key: 'my-custom-key'
@@ -189,7 +192,8 @@ test('does not call persist.storage.setItem action was dispatched an persist pro
   const persist = {
     storage: {
       getItem: jest.fn(),
-      setItem: jest.fn()
+      setItem: jest.fn(),
+      removeItem: jest.fn()
     },
     statesToPersist: () => ({})
   };

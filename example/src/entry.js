@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { HashRouter, Route, Link, Switch } from 'react-router-dom';
-import Provider from 'react-context-api-store';
+import Provider from './lib';
 
 import routes from './routes';
 
@@ -10,7 +10,14 @@ import store from './store';
 class App extends React.Component {
   render () {
     return (
-      <Provider store={store}>
+      <Provider store={store} persist={{
+        storage: localStorage,
+        statesToPersist (savedStore) {
+          return {
+            userState: { ...savedStore.userState }
+          };
+        }
+      }}>
         <HashRouter>
           <div>
             <ul>

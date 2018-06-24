@@ -49,6 +49,7 @@ class Provider extends React.Component {
     this.setState(newState);
 
     if (this.props.persist !== false) {
+      this.props.persist.storage.removeItem(this.props.persist.key || 'react-context-api-store');
       this.props.persist.storage.setItem(
         this.props.persist.key || 'react-context-api-store',
         JSON.stringify(newState)
@@ -59,16 +60,11 @@ class Provider extends React.Component {
   componentDidMount () {
     if (this.props.persist !== false && !this.persisted) {
       this.persisted = true;
-      const storedStore = this.props.persist.storage.getItem(
+      const savedStore = this.props.persist.storage.getItem(
         this.props.persist.key || 'react-context-api-store'
       );
 
-      if (storedStore) {
-        this.setState({
-          ...this.state,
-          ...this.props.persist.statesToPersist(JSON.parse(storedStore))
-        });
-      }
+      this.updateState(savedStore? this.props.persist.statesToPersist(JSON.parse(savedStore)) : {});
     }
   }
 
@@ -89,6 +85,7 @@ Provider.propTypes = {
     PropTypes.shape({
       storage: PropTypes.object.isRequired,
       statesToPersist: PropTypes.func.isRequired,
+      saveInitialState: PropTypes.bool,
       key: PropTypes.string
     }),
     PropTypes.oneOf([false])

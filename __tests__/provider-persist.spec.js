@@ -19,7 +19,9 @@ const persistedStates = {
 };
 
 const mockedStorage = {
-  getItem: () => JSON.stringify(persistedStates)
+  getItem: () => JSON.stringify(persistedStates),
+  setItem: jest.fn(),
+  removeItem: jest.fn()
 };
 
 test('matches snapshot when persist was provided', () => {
@@ -42,13 +44,26 @@ test('matches snapshot when persist was provided', () => {
   ).toMatchSnapshot();
 });
 
-test('calls persist.storage.getItem when persist prop was provided', () => {
+test('calls persist.storage.getItem and persist.storage.removeItem  when persist prop was provided', () => {
   const persist = {
     storage: {
-      getItem: jest.fn()
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      removeItem: jest.fn()
     },
     statesToPersist: jest.fn()
   };
+
+  expect(renderer.create(
+    <Provider
+      store={store}
+      persist={persist}
+    >
+      <div>
+        <h1>This is the app</h1>
+      </div>
+    </Provider>
+  ).getInstance().props.persist.storage.removeItem).toHaveBeenCalledWith('react-context-api-store');
 
   expect(renderer.create(
     <Provider
@@ -74,12 +89,28 @@ test('calls persist.storage.getItem when persist prop was provided', () => {
       </div>
     </Provider>
   ).getInstance().props.persist.storage.getItem).toHaveBeenCalledWith('my-app-custom-key');
+
+  expect(renderer.create(
+    <Provider
+      store={store}
+      persist={{
+        ...persist,
+        key: 'my-app-custom-key'
+      }}
+    >
+      <div>
+        <h1>This is the app</h1>
+      </div>
+    </Provider>
+  ).getInstance().props.persist.storage.removeItem).toHaveBeenCalledWith('my-app-custom-key');
 });
 
 test('does not call persist.statesToPersist when store.getItem returned null', () => {
   const persist = {
     storage: {
-      getItem: () => null
+      getItem: () => null,
+      setItem: jest.fn(),
+      removeItem: jest.fn()
     },
     statesToPersist: jest.fn()
   };
