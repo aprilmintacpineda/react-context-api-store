@@ -34,12 +34,13 @@ test('passes states as props to connected components', () => {
 
   const componentInstance = renderer.create(
     <Provider store={store} persist={persist}>
-      <MyComponent />
+      <MyComponent myProp="yow!" />
     </Provider>
   ).root.findByType(AComponent);
 
   expect(componentInstance.props).toEqual({
-    todos: []
+    todos: [],
+    myProp: 'yow!'
   });
 });
 

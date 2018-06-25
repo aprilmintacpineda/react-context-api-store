@@ -24,16 +24,18 @@ const connect = (wantedState, wantedMutators) => WrappedComponent => class Conne
     }), {})
   : {}
 
-  render = () => (
-    <StoreContext.Consumer>
-      { context =>
-        <WrappedComponent
-          {...this.mapStateToProps(context.state)}
-          {...this.mapActionsToProps(context.updateState, context.state)}
-        />
-      }
-    </StoreContext.Consumer>
-  )
+  render = () => {
+    return (
+      <StoreContext.Consumer>
+        { context =>
+          <WrappedComponent
+            {...this.mapStateToProps(context.state)}
+            {...this.mapActionsToProps(context.updateState, context.state)}
+            {...this.props} />
+        }
+      </StoreContext.Consumer>
+    );
+  }
 };
 
 class Provider extends React.Component {
