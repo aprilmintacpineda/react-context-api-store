@@ -1,6 +1,6 @@
 {
   "name": "react-context-api-store",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Seemless, lightweight, state management library that supports async actions and state persisting out of the box. Inspired by Redux and Vuex. Built on top of React's context api.",
   "main": "lib/index.js",
   "scripts": {
