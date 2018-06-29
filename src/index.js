@@ -16,11 +16,11 @@ const connect = (wantedState, wantedMutators) => WrappedComponent => class Conne
   ? wantedState({ ...storeState })
   : {}
 
-  mapActionsToProps = (updateState, storeState) => wantedMutators
+  mapActionsToProps = (updateStore, storeState) => wantedMutators
   ? Object.keys(wantedMutators)
     .reduce((accumulatedMutators, mutator) => ({
       ...accumulatedMutators,
-      [mutator]: this.dispatcher(updateState, storeState, wantedMutators[mutator])
+      [mutator]: this.dispatcher(updateStore, storeState, wantedMutators[mutator])
     }), {})
   : {}
 
@@ -30,7 +30,7 @@ const connect = (wantedState, wantedMutators) => WrappedComponent => class Conne
         { context =>
           <WrappedComponent
             {...this.mapStateToProps(context.state)}
-            {...this.mapActionsToProps(context.updateState, context.state)}
+            {...this.mapActionsToProps(context.updateStore, context.state)}
             {...this.props} />
         }
       </StoreContext.Consumer>
@@ -42,21 +42,24 @@ class Provider extends React.Component {
   state = { ...this.props.store };
   persisted = false
 
-  updateState = updatedState => {
-    const newState = {
-      ...this.state,
-      ...updatedState
-    };
-
-    this.setState(newState);
-
+  persist = () => {
     if (this.props.persist !== false) {
       this.props.persist.storage.removeItem(this.props.persist.key || 'react-context-api-store');
       this.props.persist.storage.setItem(
         this.props.persist.key || 'react-context-api-store',
-        JSON.stringify(newState)
+        JSON.stringify(this.state)
       );
     }
+  }
+
+  updateStore = (updatedStore, callback) => {
+    this.setState({
+      ...this.state,
+      ...updatedStore
+    }, () => {
+      this.persist();
+      if (callback) callback(this.state);
+    });
   }
 
   componentDidMount () {
@@ -66,14 +69,16 @@ class Provider extends React.Component {
         this.props.persist.key || 'react-context-api-store'
       );
 
-      this.updateState(savedStore? this.props.persist.statesToPersist(JSON.parse(savedStore)) : {});
+      this.updateStore(savedStore? this.props.persist.statesToPersist(JSON.parse(savedStore)) : {});
     }
   }
 
   render = () => (
     <StoreContext.Provider value={{
       state: { ...this.state },
-      updateState: this.updateState
+      updateStore: (updatedStore, callback) => {
+        this.updateStore(updatedStore, callback);
+      }
     }}>
       {this.props.children}
     </StoreContext.Provider>

@@ -253,3 +253,65 @@ test('does not call persist.storage.setItem action was dispatched an persist pro
   ]);
   expect(persist.storage.setItem).not.toHaveBeenCalled();
 });
+
+test('does not call persist.storage.setItem action was dispatched an persist prop was **NOT** provided', () => {
+  const store = {
+    authUser: {
+      user: null
+    },
+    todos: []
+  };
+
+  const newTodo = {
+    name: 'test todo'
+  };
+
+  class AComponent extends React.Component {
+    render = () => (
+      <div>
+        <h1>my component!</h1>
+      </div>
+    )
+  }
+
+  AComponent.propTypes = {
+    addTodo: PropTypes.func.isRequired
+  };
+
+  const callback = jest.fn();
+
+  function addTodo (store, todo) {
+    store.updateStore({
+      todos: [
+        ...store.state.todos,
+        todo
+      ]
+    }, callback);
+  };
+
+  const MyComponent = connect(states => ({
+    todos: states.todos
+  }), {
+    addTodo
+  })(AComponent);
+
+  const componentInstance = renderer.create(
+    <Provider store={store}>
+      <MyComponent />
+    </Provider>
+  );
+
+  const targetComponent = componentInstance.root.findByType(AComponent);
+  targetComponent.props.addTodo(newTodo);
+
+  expect(callback).toHaveBeenCalledWith({
+    authUser: {
+      user: null
+    },
+    todos: [
+      {
+        name: 'test todo'
+      }
+    ]
+  });
+});

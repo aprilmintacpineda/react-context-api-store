@@ -58,16 +58,16 @@ var connect = function connect(wantedState, wantedMutators) {
           };
         }, _this.mapStateToProps = function (storeState) {
           return wantedState ? wantedState(_extends({}, storeState)) : {};
-        }, _this.mapActionsToProps = function (updateState, storeState) {
+        }, _this.mapActionsToProps = function (updateStore, storeState) {
           return wantedMutators ? Object.keys(wantedMutators).reduce(function (accumulatedMutators, mutator) {
-            return _extends({}, accumulatedMutators, _defineProperty({}, mutator, _this.dispatcher(updateState, storeState, wantedMutators[mutator])));
+            return _extends({}, accumulatedMutators, _defineProperty({}, mutator, _this.dispatcher(updateStore, storeState, wantedMutators[mutator])));
           }, {}) : {};
         }, _this.render = function () {
           return _react2.default.createElement(
             StoreContext.Consumer,
             null,
             function (context) {
-              return _react2.default.createElement(WrappedComponent, _extends({}, _this.mapStateToProps(context.state), _this.mapActionsToProps(context.updateState, context.state), _this.props));
+              return _react2.default.createElement(WrappedComponent, _extends({}, _this.mapStateToProps(context.state), _this.mapActionsToProps(context.updateStore, context.state), _this.props));
             }
           );
         }, _temp), _possibleConstructorReturn(_this, _ret);
@@ -92,21 +92,24 @@ var Provider = function (_React$Component2) {
       args[_key3] = arguments[_key3];
     }
 
-    return _ret2 = (_temp2 = (_this2 = _possibleConstructorReturn(this, (_ref2 = Provider.__proto__ || Object.getPrototypeOf(Provider)).call.apply(_ref2, [this].concat(args))), _this2), _this2.state = _extends({}, _this2.props.store), _this2.persisted = false, _this2.updateState = function (updatedState) {
-      var newState = _extends({}, _this2.state, updatedState);
-
-      _this2.setState(newState);
-
+    return _ret2 = (_temp2 = (_this2 = _possibleConstructorReturn(this, (_ref2 = Provider.__proto__ || Object.getPrototypeOf(Provider)).call.apply(_ref2, [this].concat(args))), _this2), _this2.state = _extends({}, _this2.props.store), _this2.persisted = false, _this2.persist = function () {
       if (_this2.props.persist !== false) {
         _this2.props.persist.storage.removeItem(_this2.props.persist.key || 'react-context-api-store');
-        _this2.props.persist.storage.setItem(_this2.props.persist.key || 'react-context-api-store', JSON.stringify(newState));
+        _this2.props.persist.storage.setItem(_this2.props.persist.key || 'react-context-api-store', JSON.stringify(_this2.state));
       }
+    }, _this2.updateStore = function (updatedStore, callback) {
+      _this2.setState(_extends({}, _this2.state, updatedStore), function () {
+        _this2.persist();
+        if (callback) callback(_this2.state);
+      });
     }, _this2.render = function () {
       return _react2.default.createElement(
         StoreContext.Provider,
         { value: {
             state: _extends({}, _this2.state),
-            updateState: _this2.updateState
+            updateStore: function updateStore(updatedStore, callback) {
+              _this2.updateStore(updatedStore, callback);
+            }
           } },
         _this2.props.children
       );
@@ -120,7 +123,7 @@ var Provider = function (_React$Component2) {
         this.persisted = true;
         var savedStore = this.props.persist.storage.getItem(this.props.persist.key || 'react-context-api-store');
 
-        this.updateState(savedStore ? this.props.persist.statesToPersist(JSON.parse(savedStore)) : {});
+        this.updateStore(savedStore ? this.props.persist.statesToPersist(JSON.parse(savedStore)) : {});
       }
     }
   }]);

@@ -1,7 +1,7 @@
 {
   "name": "react-context-api-store",
   "version": "1.0.12",
-  "description": "An HOC state management inpired by redux implemented using react's context api.",
+  "description": "Seemless, lightweight, state management library that supports async actions and state persisting out of the box. Inspired by Redux and Vuex. Built on top of React's context api.",
   "main": "lib/index.js",
   "scripts": {
     "test": "npm run build && jest --coverage --updateSnapshot",
