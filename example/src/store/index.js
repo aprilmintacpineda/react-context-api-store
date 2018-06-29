@@ -73,7 +73,5 @@ export function addTodo (store, value, callback) {
         isDone: false
       }
     ]
-  });
-
-  callback();
+  }, callback);
 }
