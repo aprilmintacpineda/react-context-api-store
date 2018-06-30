@@ -17,7 +17,8 @@
     "state-management",
     "react-context-api",
     "store",
-    "global-states"
+    "global-states",
+    "react"
   ],
   "files": [
     "lib/*",
