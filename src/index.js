@@ -39,8 +39,24 @@ const connect = (wantedState, wantedMutators) => WrappedComponent => class Conne
 };
 
 class Provider extends React.Component {
-  state = { ...this.props.store };
-  persisted = false
+  constructor (props) {
+    super(props);
+
+    if (this.props.persist !== false) {
+      const savedStore = this.props.persist.storage.getItem(
+        this.props.persist.key || 'react-context-api-store'
+      );
+
+      this.state = {
+        ...this.props.store,
+        ...this.props.persist.statesToPersist(JSON.parse(savedStore))
+      };
+
+      this.persist();
+    } else {
+      this.state = { ...this.props.store };
+    }
+  }
 
   persist = () => {
     if (this.props.persist !== false) {
@@ -60,17 +76,6 @@ class Provider extends React.Component {
       this.persist();
       if (callback) callback(this.state);
     });
-  }
-
-  componentDidMount () {
-    if (this.props.persist !== false && !this.persisted) {
-      this.persisted = true;
-      const savedStore = this.props.persist.storage.getItem(
-        this.props.persist.key || 'react-context-api-store'
-      );
-
-      this.updateStore(savedStore? this.props.persist.statesToPersist(JSON.parse(savedStore)) : {});
-    }
   }
 
   render = () => (

@@ -1,317 +1,180 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import PropTypes from 'prop-types';
 import Provider, { connect } from '../lib';
 
-test('passes states as props to connected components', () => {
-  const persist = {
-    storage: {
-      getItem: jest.fn(),
-      setItem: jest.fn(),
-      removeItem: jest.fn()
-    },
-    statesToPersist: () => ({})
-  };
+describe('Components connected to provider', () => {
+  test('passes states and actions to props', () => {
+    class ComponentA extends React.Component {
+      render = () => (
+        <div>
+          <h1>my component!</h1>
+        </div>
+      )
+    }
 
-  const store = {
-    authUser: {
-      user: null
-    },
-    todos: []
-  };
+    const MyComponent = connect(states => ({
+      user: states.user
+    }))(ComponentA);
 
-  class AComponent extends React.Component {
-    render = () => (
-      <div>
-        <h1>my component!</h1>
-      </div>
-    )
-  }
+    const componentInstance = renderer.create(
+      <Provider store={{ user: 'testUser' }}>
+        <MyComponent myProp="yow!" />
+      </Provider>
+    ).root.findByType(ComponentA);
 
-  const MyComponent = connect(states => ({
-    todos: states.todos
-  }))(AComponent);
-
-  const componentInstance = renderer.create(
-    <Provider store={store} persist={persist}>
-      <MyComponent myProp="yow!" />
-    </Provider>
-  ).root.findByType(AComponent);
-
-  expect(componentInstance.props).toEqual({
-    todos: [],
-    myProp: 'yow!'
+    expect(componentInstance.props).toEqual({
+      user: 'testUser',
+      myProp: 'yow!'
+    });
   });
-});
+  test('passes actions to props and calls them with store as first parameter and calls callback with the updated state', () => {
+    class ComponentA extends React.Component {
+      render = () => (
+        <div>
+          <h1>my component!</h1>
+        </div>
+      )
+    }
 
-test('calls persist.storage.setItem with default key when an action was dispatched an persist prop was provided', () => {
-  const persist = {
-    storage: {
-      getItem: jest.fn(),
-      setItem: jest.fn(),
-      removeItem: jest.fn()
-    },
-    statesToPersist: () => ({})
-  };
+    const callback = jest.fn().mockName('store.updateStore callback');
 
-  const store = {
-    authUser: {
-      user: null
-    },
-    todos: []
-  };
-
-  const newTodo = {
-    name: 'test todo'
-  };
-
-  class AComponent extends React.Component {
-    render = () => (
-      <div>
-        <h1>my component!</h1>
-      </div>
-    )
-  }
-
-  AComponent.propTypes = {
-    addTodo: PropTypes.func.isRequired
-  };
-
-  function addTodo (store, todo) {
-    store.updateStore({
-      todos: [
-        ...store.state.todos,
-        todo
-      ]
-    });
-  };
-
-  const MyComponent = connect(states => ({
-    todos: states.todos
-  }), {
-    addTodo
-  })(AComponent);
-
-  const componentInstance = renderer.create(
-    <Provider store={store} persist={persist}>
-      <MyComponent />
-    </Provider>
-  );
-
-  const targetComponent = componentInstance.root.findByType(AComponent);
-
-  expect(targetComponent.props.todos).toEqual([]);
-  expect(targetComponent.props.addTodo).toBeInstanceOf(Function);
-  targetComponent.props.addTodo(newTodo);
-  expect(targetComponent.props.todos).toEqual([
-    { ...newTodo }
-  ]);
-  expect(persist.storage.setItem).toHaveBeenCalledWith('react-context-api-store', JSON.stringify({
-    authUser: {
-      user: null
-    },
-    todos: [
-      { ...newTodo }
-    ]
-  }));
-});
-
-test('calls persist.storage.setItem with custom key when an action was dispatched an persist prop was provided', () => {
-  const persist = {
-    storage: {
-      getItem: jest.fn(),
-      setItem: jest.fn(),
-      removeItem: jest.fn()
-    },
-    statesToPersist: () => ({}),
-    key: 'my-custom-key'
-  };
-
-  const store = {
-    authUser: {
-      user: null
-    },
-    todos: []
-  };
-
-  const newTodo = {
-    name: 'test todo'
-  };
-
-  class AComponent extends React.Component {
-    render = () => (
-      <div>
-        <h1>my component!</h1>
-      </div>
-    )
-  }
-
-  AComponent.propTypes = {
-    addTodo: PropTypes.func.isRequired
-  };
-
-  function addTodo (store, todo) {
-    store.updateStore({
-      todos: [
-        ...store.state.todos,
-        todo
-      ]
-    });
-  };
-
-  const MyComponent = connect(states => ({
-    todos: states.todos
-  }), {
-    addTodo
-  })(AComponent);
-
-  const componentInstance = renderer.create(
-    <Provider store={store} persist={persist}>
-      <MyComponent />
-    </Provider>
-  );
-
-  const targetComponent = componentInstance.root.findByType(AComponent);
-
-  expect(targetComponent.props.todos).toEqual([]);
-  expect(targetComponent.props.addTodo).toBeInstanceOf(Function);
-  targetComponent.props.addTodo(newTodo);
-  expect(targetComponent.props.todos).toEqual([
-    { ...newTodo }
-  ]);
-  expect(persist.storage.setItem).toHaveBeenCalledWith('my-custom-key', JSON.stringify({
-    authUser: {
-      user: null
-    },
-    todos: [
-      { ...newTodo }
-    ]
-  }));
-});
-
-test('does not call persist.storage.setItem action was dispatched an persist prop was **NOT** provided', () => {
-  const persist = {
-    storage: {
-      getItem: jest.fn(),
-      setItem: jest.fn(),
-      removeItem: jest.fn()
-    },
-    statesToPersist: () => ({})
-  };
-
-  const store = {
-    authUser: {
-      user: null
-    },
-    todos: []
-  };
-
-  const newTodo = {
-    name: 'test todo'
-  };
-
-  class AComponent extends React.Component {
-    render = () => (
-      <div>
-        <h1>my component!</h1>
-      </div>
-    )
-  }
-
-  AComponent.propTypes = {
-    addTodo: PropTypes.func.isRequired
-  };
-
-  function addTodo (store, todo) {
-    store.updateStore({
-      todos: [
-        ...store.state.todos,
-        todo
-      ]
-    });
-  };
-
-  const MyComponent = connect(states => ({
-    todos: states.todos
-  }), {
-    addTodo
-  })(AComponent);
-
-  const componentInstance = renderer.create(
-    <Provider store={store}>
-      <MyComponent />
-    </Provider>
-  );
-
-  const targetComponent = componentInstance.root.findByType(AComponent);
-
-  expect(targetComponent.props.todos).toEqual([]);
-  expect(targetComponent.props.addTodo).toBeInstanceOf(Function);
-  targetComponent.props.addTodo(newTodo);
-  expect(targetComponent.props.todos).toEqual([
-    { ...newTodo }
-  ]);
-  expect(persist.storage.setItem).not.toHaveBeenCalled();
-});
-
-test('does not call persist.storage.setItem action was dispatched an persist prop was **NOT** provided', () => {
-  const store = {
-    authUser: {
-      user: null
-    },
-    todos: []
-  };
-
-  const newTodo = {
-    name: 'test todo'
-  };
-
-  class AComponent extends React.Component {
-    render = () => (
-      <div>
-        <h1>my component!</h1>
-      </div>
-    )
-  }
-
-  AComponent.propTypes = {
-    addTodo: PropTypes.func.isRequired
-  };
-
-  const callback = jest.fn();
-
-  function addTodo (store, todo) {
-    store.updateStore({
-      todos: [
-        ...store.state.todos,
-        todo
-      ]
-    }, callback);
-  };
-
-  const MyComponent = connect(states => ({
-    todos: states.todos
-  }), {
-    addTodo
-  })(AComponent);
-
-  const componentInstance = renderer.create(
-    <Provider store={store}>
-      <MyComponent />
-    </Provider>
-  );
-
-  const targetComponent = componentInstance.root.findByType(AComponent);
-  targetComponent.props.addTodo(newTodo);
-
-  expect(callback).toHaveBeenCalledWith({
-    authUser: {
-      user: null
-    },
-    todos: [
-      {
-        name: 'test todo'
+    const MyComponent = connect(states => ({
+      user: states.user,
+      other: states.other
+    }), {
+      myAction (store, user, other) {
+        store.updateStore({
+          user,
+          other
+        }, callback);
       }
-    ]
+    })(ComponentA);
+
+    const componentInstance = renderer.create(
+      <Provider store={{ user: null, other: null }}>
+        <MyComponent myProp="yow!" />
+      </Provider>
+    );
+
+    const targetComponentInstance = componentInstance.root.findByType(ComponentA);
+
+    expect(targetComponentInstance.props.user).toEqual(null);
+    expect(targetComponentInstance.props.other).toEqual(null);
+    targetComponentInstance.props.myAction('testuser', 'testother');
+    expect(componentInstance.getInstance().state.user).toEqual('testuser');
+    expect(componentInstance.getInstance().state.other).toEqual('testother');
+    expect(targetComponentInstance.props.user).toEqual('testuser');
+    expect(targetComponentInstance.props.other).toEqual('testother');
+    expect(callback).toHaveBeenCalledWith({
+      user: 'testuser',
+      other: 'testother'
+    });
+  });
+  test('persists state on store.updateStore using the default key', () => {
+    class ComponentA extends React.Component {
+      render = () => (
+        <div>
+          <h1>my component!</h1>
+        </div>
+      )
+    }
+
+    const MyComponent = connect(states => ({
+      user: states.user,
+      other: states.other
+    }), {
+      myAction (store, user, other) {
+        store.updateStore({
+          user,
+          other
+        });
+      }
+    })(ComponentA);
+
+    const componentInstance = renderer.create(
+      <Provider
+        store={{ user: null, other: null }}
+        persist={{
+          storage: {
+            getItem: jest.fn(() => JSON.stringify({})).mockName('storage.getItem'),
+            setItem: jest.fn().mockName('storage.setItem'),
+            removeItem: jest.fn().mockName('storage.removeItem')
+          },
+          statesToPersist (savedStates) {
+            return savedStates;
+          }
+        }}>
+        <MyComponent myProp="yow!" />
+      </Provider>
+    );
+
+    const targetComponentInstance = componentInstance.root.findByType(ComponentA);
+
+    expect(targetComponentInstance.props.user).toEqual(null);
+    expect(targetComponentInstance.props.other).toEqual(null);
+    targetComponentInstance.props.myAction('testuser', 'testother');
+    expect(componentInstance.getInstance().state.user).toEqual('testuser');
+    expect(componentInstance.getInstance().state.other).toEqual('testother');
+    expect(targetComponentInstance.props.user).toEqual('testuser');
+    expect(targetComponentInstance.props.other).toEqual('testother');
+    expect(componentInstance.getInstance().props.persist.storage.removeItem).toHaveBeenCalledWith('react-context-api-store');
+    expect(componentInstance.getInstance().props.persist.storage.setItem).toHaveBeenCalledWith('react-context-api-store', JSON.stringify({
+      user: 'testuser',
+      other: 'testother'
+    }));
+  });
+  test('persists state on store.updateStore using the custom key', () => {
+    class ComponentA extends React.Component {
+      render = () => (
+        <div>
+          <h1>my component!</h1>
+        </div>
+      )
+    }
+
+    const MyComponent = connect(states => ({
+      user: states.user,
+      other: states.other
+    }), {
+      myAction (store, user, other) {
+        store.updateStore({
+          user,
+          other
+        });
+      }
+    })(ComponentA);
+
+    const componentInstance = renderer.create(
+      <Provider
+        store={{ user: null, other: null }}
+        persist={{
+          key: 'my-custom-key',
+          storage: {
+            getItem: jest.fn(() => JSON.stringify({})).mockName('storage.getItem'),
+            setItem: jest.fn().mockName('storage.setItem'),
+            removeItem: jest.fn().mockName('storage.removeItem')
+          },
+          statesToPersist (savedStates) {
+            return savedStates;
+          }
+        }}>
+        <MyComponent myProp="yow!" />
+      </Provider>
+    );
+
+    const targetComponentInstance = componentInstance.root.findByType(ComponentA);
+
+    expect(targetComponentInstance.props.user).toEqual(null);
+    expect(targetComponentInstance.props.other).toEqual(null);
+    targetComponentInstance.props.myAction('testuser', 'testother');
+    expect(componentInstance.getInstance().state.user).toEqual('testuser');
+    expect(componentInstance.getInstance().state.other).toEqual('testother');
+    expect(targetComponentInstance.props.user).toEqual('testuser');
+    expect(targetComponentInstance.props.other).toEqual('testother');
+    expect(componentInstance.getInstance().props.persist.storage.removeItem).toHaveBeenCalledWith('my-custom-key');
+    expect(componentInstance.getInstance().props.persist.storage.setItem).toHaveBeenCalledWith('my-custom-key', JSON.stringify({
+      user: 'testuser',
+      other: 'testother'
+    }));
   });
 });

@@ -2,10 +2,10 @@
 This library is actively being maintained by the developer. Feature requests, enhancements, and bug reports are all welcome to the issue section.
 
 # react-context-api-store
-Seemless, lightweight, state management library that supports async actions and state persisting out of the box. Inspired by Redux and Vuex. Built on top of [React's context api](https://reactjs.org/docs/context.html).
+Seemless, lightweight, state management library that supports async actions and persistent states out of the box. Inspired by Redux and Vuex. Built on top of [React's context api](https://reactjs.org/docs/context.html).
 
 # File size?
-6.7kb transpiled. Not minified. Not compressed. Not uglified.
+6.0kb transpiled. Not minified. Not compressed. Not uglified.
 
 # Example
 https://aprilmintacpineda.github.io/react-context-api-store/#/
