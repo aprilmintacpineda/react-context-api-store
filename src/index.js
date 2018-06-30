@@ -49,7 +49,7 @@ class Provider extends React.Component {
 
       this.state = {
         ...this.props.store,
-        ...this.props.persist.statesToPersist(JSON.parse(savedStore))
+        ...this.props.persist.statesToPersist(JSON.parse(savedStore) || {})
       };
 
       this.persist();

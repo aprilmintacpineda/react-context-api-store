@@ -48,6 +48,32 @@ describe('Provider setup / initialization', () => {
       other: null
     });
   });
+  test('should give default empty object to persist.statesToPersist when storage is null', () => {
+    const myComponent = renderer.create(
+      <Provider
+        store={{
+          user: null,
+          other: null
+        }}
+        persist={{
+          storage: {
+            getItem: jest.fn(() => null).mockName('storage.getItem'),
+            setItem: jest.fn().mockName('storage.setItem'),
+            removeItem: jest.fn().mockName('storage.removeItem')
+          },
+          statesToPersist: jest.fn()
+        }}>
+        <div>
+          <p>Yow~</p>
+        </div>
+      </Provider>
+    ).getInstance();
+
+    expect(myComponent.props.persist.storage.getItem)
+    .toBeCalledWith('react-context-api-store');
+
+    expect(myComponent.props.persist.statesToPersist).toHaveBeenLastCalledWith({});
+  });
   test('should persists states with default key', () => {
     const myComponent = renderer.create(
       <Provider
