@@ -14,7 +14,7 @@ class App extends React.Component {
         storage: localStorage,
         statesToPersist (savedStore) {
           return {
-            userState: { ...savedStore.userState }
+            userState: savedStore.userState || store.userState
           };
         }
       }}>
