@@ -1,5 +1,6 @@
-# Repo status?
-This library is actively being maintained by the developer. Feature requests, enhancements, and bug reports are all welcome to the issue section.
+# THIS PROJECT HAS BEEN ARCHIVED
+
+Archived in favor of [react-fluxible](https://www.npmjs.com/package/react-fluxible). Please migrate.
 
 # react-context-api-store
 Seemless, lightweight, state management library that supports async actions and persistent states out of the box. Inspired by Redux and Vuex. Built on top of [React's context api](https://reactjs.org/docs/context.html).
